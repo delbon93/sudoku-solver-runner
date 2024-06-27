@@ -12,8 +12,7 @@ internal static class Program {
         
         string csvFile = args[0];
 
-        SudokuPuzzleStream puzzleStream = new SudokuPuzzleStream();
-        puzzleStream.ReadFromCsv(csvFile, delim: ",", skipHeader: true);
+        ISudokuPuzzleStream puzzleStream = new CsvFileSudokuPuzzleStream(csvFile, delim: ",", skipHeader: true);
 
         ISudokuSolver solver = new NaiveSudokuSolver();
         SudokuSolverRunner solverRunner = new SudokuSolverRunner();
@@ -21,7 +20,7 @@ internal static class Program {
         Console.WriteLine($"Running with solver '{solver.GetType().Name}':");
         SudokuSolverRunner.SolverRunResult totalResult = new();
         for (int i = 0; i < 2500; i++) {
-            if (puzzleStream.TryNext(out SudokuPuzzle puzzle, out SudokuPuzzle solution)) {
+            if (puzzleStream.TryGetNext(out SudokuPuzzle puzzle, out SudokuPuzzle solution)) {
                 Console.Write($"  • solving {puzzle.ToCompactString('x')}: ");
 
                 SudokuSolverRunner.SolverRunResult result = solverRunner.RunSingleAndValidate(solver, puzzle, solution);

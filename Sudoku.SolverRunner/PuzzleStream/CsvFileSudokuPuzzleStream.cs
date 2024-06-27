@@ -2,12 +2,12 @@
 
 namespace SudokuSolver;
 
-public class SudokuPuzzleStream : IDisposable {
+public class CsvFileSudokuPuzzleStream : IDisposable, ISudokuPuzzleStream {
 
     private StreamReader _streamReader;
     private string _delim;
     
-    public void ReadFromCsv(string filePath, string delim, bool skipHeader) {
+    public CsvFileSudokuPuzzleStream(string filePath, string delim, bool skipHeader) {
         _streamReader = new StreamReader(new FileStream(File.OpenHandle(filePath), FileAccess.Read));
         _delim = delim;
 
@@ -15,7 +15,7 @@ public class SudokuPuzzleStream : IDisposable {
             _streamReader.ReadLine();
     }
 
-    public bool TryNext(out SudokuPuzzle puzzle, out SudokuPuzzle solution) {
+    public bool TryGetNext(out SudokuPuzzle puzzle, out SudokuPuzzle solution) {
         string? line = _streamReader.ReadLine();
         if (line == null) {
             puzzle = default;
@@ -31,7 +31,7 @@ public class SudokuPuzzleStream : IDisposable {
         return true;
     }
 
-    ~SudokuPuzzleStream() {
+    ~CsvFileSudokuPuzzleStream() {
         Dispose(false);
     }
 
