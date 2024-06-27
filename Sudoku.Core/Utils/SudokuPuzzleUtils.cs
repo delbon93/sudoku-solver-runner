@@ -1,4 +1,4 @@
-﻿namespace SudokuSolver;
+﻿namespace Sudoku.Core.Utils;
 
 public static class SudokuPuzzleUtils {
 

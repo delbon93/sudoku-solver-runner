@@ -1,4 +1,7 @@
-﻿namespace SudokuSolver;
+﻿using Sudoku.Core;
+using Sudoku.Core.Utils;
+
+namespace SudokuSolver;
 
 public class NaiveSudokuSolver : ISudokuSolver {
 

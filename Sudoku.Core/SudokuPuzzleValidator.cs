@@ -1,4 +1,6 @@
-﻿namespace SudokuSolver;
+﻿using Sudoku.Core.Utils;
+
+namespace Sudoku.Core;
 
 public class SudokuPuzzleValidator {
 

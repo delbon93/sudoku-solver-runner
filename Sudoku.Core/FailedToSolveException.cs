@@ -1,4 +1,4 @@
-﻿namespace SudokuSolver;
+﻿namespace Sudoku.Core;
 
 public class FailedToSolveException(SudokuPuzzle stateAtFailure, string reason = "") : Exception {
     

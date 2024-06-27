@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Sudoku.Core;
 
 namespace SudokuSolver;
 

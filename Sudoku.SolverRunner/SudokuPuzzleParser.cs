@@ -1,4 +1,6 @@
-﻿namespace SudokuSolver;
+﻿using Sudoku.Core;
+
+namespace SudokuSolver;
 
 public static class SudokuPuzzleParser {
 

@@ -1,4 +1,6 @@
-﻿public static class CollectionUtils {
+﻿namespace Sudoku.Core.Utils;
+
+public static class CollectionUtils {
     
     public static int IndexOfMinValueIgnoreZero(IEnumerable<int> collection) {
         int min = int.MaxValue;
