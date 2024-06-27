@@ -9,6 +9,8 @@ public interface ISudokuSolver {
     /// <param name="puzzle">The sudoku puzzle state to solve</param>
     /// <exception cref="FailedToSolveException"></exception>
     /// <returns>The solution state of the sudoku puzzle</returns>
-    public SudokuPuzzle Solve(SudokuPuzzle puzzle);
+    SudokuPuzzle Solve(SudokuPuzzle puzzle);
+    
+    string SolverName { get; }
 
 }

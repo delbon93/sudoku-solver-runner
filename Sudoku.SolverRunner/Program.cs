@@ -14,10 +14,10 @@ internal static class Program {
 
         ISudokuPuzzleStream puzzleStream = new CsvFileSudokuPuzzleStream(csvFile, delim: ",", skipHeader: true);
 
-        ISudokuSolver solver = new NaiveSudokuSolver();
+        ISudokuSolver solver = new BruteForceSudokuSolver();
         SudokuSolverRunner solverRunner = new SudokuSolverRunner();
 
-        Console.WriteLine($"Running with solver '{solver.GetType().Name}':");
+        Console.WriteLine($"Running with solver '{solver.SolverName}':");
         SudokuSolverRunner.SolverRunResult totalResult = new();
         for (int i = 0; i < 2500; i++) {
             if (puzzleStream.TryGetNext(out SudokuPuzzle puzzle, out SudokuPuzzle solution)) {

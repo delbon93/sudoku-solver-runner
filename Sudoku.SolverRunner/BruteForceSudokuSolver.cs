@@ -3,9 +3,11 @@ using Sudoku.Core.Utils;
 
 namespace SudokuSolver;
 
-public class NaiveSudokuSolver : ISudokuSolver {
+public class BruteForceSudokuSolver : ISudokuSolver {
 
     private readonly SudokuPuzzleValidator _validator = new();
+
+    public string SolverName => "Brute Force Solver";
 
     public SudokuPuzzle Solve(SudokuPuzzle puzzle) {
         // Holds bitmasks for valid options per cell given the current puzzle state
