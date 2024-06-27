@@ -12,10 +12,14 @@ public class SudokuPuzzleValidator {
         return true;
     }
 
-    private bool ValidateCell(SudokuPuzzle puzzle, ushort row, ushort col, bool treatUnsetAsValid) {
+    private static bool ValidateCell(SudokuPuzzle puzzle, ushort row, ushort col, bool treatUnsetAsValid) {
         if (puzzle.IsUnset(row, col))
             return treatUnsetAsValid;
-        
+
+        return ValidateCellForBox(puzzle, row, col) && ValidateCellForRowAndCol(puzzle, row, col);
+    }
+
+    private static bool ValidateCellForBox(SudokuPuzzle puzzle, ushort row, ushort col) {
         ushort num = puzzle.Get(row, col);
         
         (ushort boxRow, ushort boxCol) = SudokuPuzzleUtils.GetBoxStartRowAndCol(row, col);
@@ -29,8 +33,13 @@ public class SudokuPuzzleValidator {
             if (puzzle.Get((ushort) (boxRow + r), (ushort) (boxCol + c)) == num)
                 return false;
         }
+
+        return true;
+    }
+
+    private static bool ValidateCellForRowAndCol(SudokuPuzzle puzzle, ushort row, ushort col) {
+        ushort num = puzzle.Get(row, col);
         
-        // Check row & col
         for (ushort i = 0; i < 9; i++) {
             if (i != col && puzzle.Get(row, i) == num)
                 return false;
