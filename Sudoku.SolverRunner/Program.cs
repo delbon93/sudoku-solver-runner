@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Reflection;
+using CommandLine;
 using Sudoku.Core;
 
 namespace SudokuSolver;
@@ -20,9 +21,33 @@ internal static class Program {
     }
 
     private static void MainWithParsedOptions(CommandLineOptions options) {
-        ISudokuPuzzleStream puzzleStream = new CsvFileSudokuPuzzleStream(options.InputLocation, delim: ",", skipHeader: true);
+        Assembly assemblyToSearch = Assembly.LoadFile(options.SolverAssembly);
+        Type[] solverTypes = GetSolverTypesFromAssembly(assemblyToSearch).ToArray();
+        
+        Console.WriteLine($"Found solver types in assembly '{assemblyToSearch.GetName()}':");
+        foreach (Type solverType in solverTypes) {
+            Console.WriteLine($"  - {solverType.FullName}");
+        }
+        Console.WriteLine();
 
-        ISudokuSolver solver = new BruteForceSudokuSolver();
+        foreach (Type solverType in solverTypes) {
+            ISudokuSolver? solverInstance = Activator.CreateInstance(solverType) as ISudokuSolver ?? null;
+
+            if (solverInstance == null) {
+                Console.Error.WriteLine($"Could not instantiate solver of type {solverType.Name}");
+                continue;
+            }
+
+            ISudokuPuzzleStream puzzleStream = new CsvFileSudokuPuzzleStream(options.InputLocation, delim: ",", skipHeader: true);
+            RunPuzzlesWithSolver(solverInstance, puzzleStream);
+        }
+    }
+
+    private static IEnumerable<Type> GetSolverTypesFromAssembly(Assembly assembly) {
+        return assembly.GetTypes().Where(type => type.IsAssignableTo(typeof(ISudokuSolver)));
+    }
+
+    private static void RunPuzzlesWithSolver(ISudokuSolver solver, ISudokuPuzzleStream puzzleStream) {
         SudokuSolverRunner solverRunner = new SudokuSolverRunner();
 
         Console.WriteLine($"Running with solver '{solver.SolverName}':");
