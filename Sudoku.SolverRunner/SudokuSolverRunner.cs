@@ -7,19 +7,19 @@ public class SudokuSolverRunner {
 
     private readonly Stopwatch _stopwatch = new();
     
-    public SolverRunResult RunSingleAndValidate(ISudokuSolver solver, SudokuPuzzle puzzle, SudokuPuzzle solution) {
+    public SolverRunResult RunSingleAndValidate(ISudokuSolver solver, SudokuPuzzle puzzle, SudokuPuzzle solution, out SudokuPuzzle solutionFromSolver) {
         SolverRunResult result = new() {
             TotalRuns = 1,
         };
 
         try {
             _stopwatch.Restart();
-            SudokuPuzzle solutionFromSolver = solver.Solve(puzzle.Clone());
+            solutionFromSolver = solver.Solve(puzzle.Clone());
             _stopwatch.Stop();
 
             bool success = solutionFromSolver.Equals(solution);
-            
-            result.TotalRuntimeMillis += _stopwatch.ElapsedMilliseconds;
+
+            result.TotalRuntimeMicros += _stopwatch.Elapsed.Microseconds;
 
             if (success)
                 result.SuccessfulRuns++;
@@ -57,9 +57,10 @@ public class SudokuSolverRunner {
         public float ErrorRate => TotalRuns != 0 ? (float) IncorrectRuns / TotalRuns : 0.0f;
         public float SolveRate => TotalRuns != 0 ? 1.0f - (float) UnsolvedRuns / TotalRuns : 0.0f;
 
-        public long TotalRuntimeMillis { get; set; } = 0;
+        public long TotalRuntimeMicros { get; set; } = 0;
+        public long TotalRuntimeMillis => TotalRuntimeMicros / 1000L;
         public float AverageRuntimeMillis => TotalRuns != 0 ? (float) TotalRuntimeMillis / TotalRuns : 0.0f;
-        
+        public float AverageRuntimeMicros => TotalRuns != 0 ? (float) TotalRuntimeMicros / TotalRuns : 0.0f;
         
         public SolverRunResult() { }
 
@@ -67,7 +68,7 @@ public class SudokuSolverRunner {
             SolverRunResult s = new() {
                 TotalRuns = r1.TotalRuns + r2.TotalRuns,
                 SuccessfulRuns = r1.SuccessfulRuns + r2.SuccessfulRuns,
-                TotalRuntimeMillis = r1.TotalRuntimeMillis + r2.TotalRuntimeMillis,
+                TotalRuntimeMicros = r1.TotalRuntimeMicros + r2.TotalRuntimeMicros,
                 UnsolvedRuns = r1.UnsolvedRuns + r2.UnsolvedRuns,
             };
             
